@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  namespace绑定了与之对应的接口,值是该接口的全限定名;这个参数有且只有一个
+-->
+<mapper namespace="com.example.order.mapper.OrderMapper">
+
+    <resultMap id="orderAndGoods" type="order">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="price" jdbcType="DECIMAL" javaType="double"  property="price" />
+        <result column="contact_name" jdbcType="VARCHAR" javaType="string"  property="contactName" />
+        <result column="contact_phone" jdbcType="VARCHAR" javaType="string"  property="contactPhone" />
+        <result column="contact_address" jdbcType="VARCHAR" javaType="string"  property="contactAddress" />
+        <result column="note" jdbcType="VARCHAR" javaType="string"  property="note" />
+        <result column="create_time" jdbcType="DATE" javaType="date"  property="createTime" />
+        <association property="goods" javaType="Goods">
+            <id column="gid" property="id"></id>
+            <result column="name" property="name"></result>
+            <result column="img" property="img"></result>
+            <result column="gprice" property="price"></result>
+            <result column="descr" property="descr"></result>
+        </association>
+    </resultMap>
+
+    <select id="selectOne" resultMap="orderAndGoods">
+        select o.*,g.id gid,g.`name`,g.price gprice, g.img, g.descr
+        from `order` o
+        left join goods g on g.id = o.goods_id
+        where o.id = #{id}
+    </select>
+
+    <select id="list" resultMap="orderAndGoods">
+        select o.*,g.id gid,g.`name`,g.price gprice, g.img, g.descr
+        from `order` o
+        left join goods g on g.id = o.goods_id
+        <where>
+            <if test="contactName != null">
+                o.contact_name = #{contactName}
+            </if>
+            <if test="contactPhone != null">
+                AND o.contact_phone = #{contactPhone}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="add" parameterType="Order">
+        INSERT INTO `order`(`price`, `contact_name`, `contact_phone`,
+                            `contact_address`, `note`, `create_time`, `goods_id`)
+        VALUES (#{price}, #{contactName}, #{contactPhone},
+                #{contactAddress}, #{note}, #{createTime}, #{goodsId})
+    </insert>
+</mapper>

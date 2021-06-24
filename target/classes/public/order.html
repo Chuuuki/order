@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订单列表</title>
+
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        .container {
+            width: 1200px;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+
+        .input {
+            width: 150px;
+        }
+
+        .data {
+            width: 100%;
+        }
+        .data table {
+            width: 100%;
+        }
+
+        table {
+
+        }
+        table td, table th {
+            /*padding: 5px 10px;*/
+            /* text-align: center; */
+        }
+
+        .reset:hover {
+            background-color: #F4F4F5;
+        }
+
+        td > img {
+            min-width: 100px;
+            max-width: 200px;
+            height: 100px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" style="margin-bottom: 50px">
+        <h1>用户管理</h1>
+        <div>
+            <form method="GET" style="float: right;">
+                <input class="input" id="name" type="text" placeholder="联系人姓名">
+                <input class="input" id="phone" type="text" placeholder="联系人手机号">
+                <button type="button" class="btn-i" id="searchBtn">查询</button>
+                <button type="button" class="reset" id="reset" style="margin-left: 5px">重置</button>
+            </form>
+            <div style="margin: 20px 0;">
+                <button type="button" class="btn-p" onclick="add()">添加</button>
+<!--                <button type="button" class="btn-r" onclick="deleteAll()">删除</button>-->
+            </div>
+        </div>
+        <div class="data">
+            <table style="text-align: left;">
+                <thead>
+                    <th style="width: 30px;"></th>
+                    <th>订单编号</th>
+                    <th>商品信息</th>
+                    <th>价格</th>
+                    <th>联系人姓名</th>
+                    <th>备注</th>
+                    <th>创建日期</th>
+                    <th style="width: 100px;text-align: center;">操作</th>
+                </thead>
+                <tbody id="tbody">
+                    
+                </tbody>
+            </table>
+            <!--<div style="margin-top: 20px;text-align: right;">
+                <button>首页</button>
+                <button>< 上页</button>
+                <button>下页 ></button>
+                <button>尾页</button>
+            </div>-->
+        </div>
+    </div>
+</body>
+
+<div class="modal fade" id="detail" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 0 10px">
+                    <div class="row">
+                        <div class="col-4" style="max-height: 150px">
+                            <img src="" alt="" id="modalImg" width="100%" height="100%">
+                        </div>
+                        <div class="col-6">
+                            <h5 id="modalGoodsName"></h5>
+                            <div style="font-size: 14px">单价：<span id="price" >111</span></div>
+                            <div style="font-size: 14px">订单总价：<span id="totalPrice">111</span></div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 20px">
+                        <table class="table">
+                            <thead>
+                            <th>收货人姓名</th>
+                            <th>收货人电话</th>
+                            <th>收货人地址</th>
+                            <th>备注</th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td id="contactName"></td>
+                                <td id="contactPhone"></td>
+                                <td id="contactAddress"></td>
+                                <td id="note"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="./js/jquery-2.1.1.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script>
+    var data = [
+        {id: 1, name: "张三", phone: "13788888888", email: "123@qq.com", address: "北京市朝阳区", status: 1, createTime: "2021-06-01 12:12:12"},
+        {id: 2, name: "李四", phone: "13788888888", email: "456@163.com", address: "河北省唐山市", status: 2, createTime: "2021-06-01 12:12:12"},
+        {id: 3, name: "王五", phone: "13788888888", email: "aaaa@icloud.com", address: "黑龙江省哈尔滨市", status: 1, createTime: "2021-06-01 12:12:12"},
+        {id: 4, name: "周杰伦", phone: "13788888888", email: "zjl@qq.com", address: "湖北省武汉市", status: 2, createTime: "2021-06-01 12:12:12"},
+        {id: 5, name: "薛之谦", phone: "13788888888", email: "xzq@qq.com", address: "湖南省长沙市", status: 1, createTime: "2021-06-01 12:12:12"},
+        {id: 5, name: "林俊杰", phone: "13788888888", email: "ljj@qq.com", address: "湖南省长沙市", status: 1, createTime: "2021-06-01 12:12:12"}
+    ];
+    var _status = ["", "启用", "禁用"]
+    var tbody = document.getElementById("tbody");
+
+    // 刷新数据
+    refreshTable();
+    function refreshTable(url = "./order/list") {
+        $.get(url, function (res){
+            $("#tbody").empty();
+            console.log(res)
+            for (var d of res) {
+                var tr = document.createElement("tr");
+                td = "<td><input type='checkbox' name='checkbox' class='checkbox' value='" + d.id + "'></td>"
+                td += "<td>" + d.id + "</td>"
+                td += "<td>" + `<img src='${d.goods.img}'>` + d.goods.name + "</td>"
+                td += "<td>" + d.price.toFixed(2) + "</td>"
+                td += "<td>" + d.contactName + "</td>"
+                td += "<td>" + d.note + "</td>"
+                td += "<td>" + d.createTime + "</td>"
+                td += "<td style='text-align: center'><button class='btn-o mini' onclick='detail(" + d.id + ")'>详情</button></td> ";
+                // td += " <button class='btn-r mini' onclick='remove(" + d.id + ")'>删除</button></td>"
+                tr.innerHTML = td;
+                tbody.appendChild(tr);
+            }
+        });
+
+
+    }
+
+    var dName = document.getElementById("name");
+    var dPhone = document.getElementById("phone");
+
+    document.getElementById("searchBtn").onclick = function() {
+        var url = "./order/list?1=1";
+        if (dName.value != "") {
+            url += "&contactName=" + dName.value;
+        }
+        if (dPhone.value != "") {
+            url += "&contactPhone=" + dPhone.value;
+        }
+        refreshTable(url);
+    }
+
+    function add() {
+        location.href = "./addOrder.html";
+    }
+
+    function deleteAll() {
+        var all = document.querySelectorAll(".checkbox:checked");
+        if (all.length > 0) {
+            var f = confirm("是否确认删除?");
+        } else {
+            alert("请选中记录再删除");
+        }
+    }
+
+    function reset() {
+        name.value = "";
+        dPhone.value = "";
+    }
+    document.getElementById("reset").onclick = reset;
+
+    var row = {};
+    function detail(id) {
+        // location.href = './addOrEdit.html';
+        // do something...
+        $.get("./order/" + id, function (res){
+            row = res;
+            console.log(res)
+            $("#modalTitle").text("订单：" + row.id);
+            $("#modalGoodsName").text(row.goods.name);
+            $("#modalImg")[0].src = (row.goods.img);
+            $("#price").text(row.goods.price.toFixed(2));
+            $("#totalPrice").text(row.price.toFixed(2));
+            $("#contactName").text(row.contactName);
+            $("#contactPhone").text(row.contactPhone);
+            $("#contactAddress").text(row.contactAddress);
+            $("#note").text(row.note);
+
+            $('#detail').modal('show');
+        });
+    }
+    $('#detail').on('shown.bs.modal', function (event) {
+
+    })
+
+    function remove(id) {
+        var f = confirm("确认删除此纪录？");
+        if (f) {
+            $.get()
+        }
+    }
+
+    function setHtml(id, text) {
+        document.getElementById(id).innerHTML = html;
+    }
+</script>
+</html>

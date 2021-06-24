@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订单创建</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            /* justify-content: center; */
+        }
+
+        form div {
+            margin: 5px 0;
+            width: 100%;
+            position: relative;
+        }
+
+        form label {
+            width: 130px;
+            display: inline-block;
+            text-align: right;
+        }
+        label:not([class='nore'])::before {
+            content: "*";
+            color: red;
+            margin-right: 3px;
+        }
+        input, textarea {
+            width: calc(100% - 140px) !important;
+            margin: 5px 0;
+        }
+        textarea {
+            margin-bottom: 0px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #fff;
+            border: 1px solid #dcdfe6;
+            border-radius: 7px;
+            cursor: pointer;
+            line-height: 1;
+        }
+        button:hover {
+            background-color: #ECF5FF;
+            color: #409EFF;
+        }
+
+        button:first-child {
+            background-color: #409EFF;
+            color: white;
+        }
+        .box {
+            padding: 20px 30px;
+            border: 1px solid #ebeef5;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+        }
+        .tips {
+            position: absolute;
+            font-size: 12px;
+            bottom: -12px;
+            color: red;
+            padding-left: 140px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="box" style="width: 500px;margin: 130px auto;">
+        <div style="border-bottom: 1px #d6d6d6 solid;margin-bottom: 5px;">
+            <h3>订单创建</h3>
+        </div>
+        <form action="./order/add" style="margin-top: 10px;" name="orderAdd">
+            <div>
+                <div style="display: flex;flex-wrap: wrap">
+                    <label for="">商品：</label>
+                    <select name="goodsId" id="goodsId" class="form-control">
+                        <option value="0">请选择商品..</option>
+                    </select>
+                    <div style="width: 100px;height: 100px;margin-left: 20px">
+                        <img src="" id="goodsImg" alt="" height="100%">
+                    </div>
+                </div>
+                <div class="tips"></div>
+            </div>
+            <div>
+                <label for="">收货人姓名：</label>
+                <input type="text" name="contactName" id="contactName">
+                <div class="tips"></div>
+            </div>
+            <div>
+                <label for="">收货人手机号：</label>
+                <input type="text" name="contactPhone" id="contactPhone">
+                <div class="tips"></div>
+            </div>
+            <div>
+                <label for="">收货人地址：</label>
+                <input type="text" name="contactAddress" id="contactAddress">
+                <div class="tips"></div>
+            </div>
+            <div>
+                <label for="" class="nore">备注：</label>
+                <textarea class="form-control" id="note" name="note" placeholder="订单备注"></textarea>
+                <div class="tips"></div>
+            </div>
+
+            <div style="width: 100%;text-align: center;">
+                <button type="button" style="background-color: #57b846;" onclick="save()">保存</button>
+                <button type="button" onclick="cancel()">取消</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+<script src="./js/jquery-2.1.1.min.js"></script>
+<script>
+    var goodsId = document.getElementById("goodsId")
+    var contactName = document.getElementById("contactName")
+    var contactPhone = document.getElementById("contactPhone")
+    var contactAddress = document.getElementById("contactAddress")
+    var note = document.getElementById("note")
+
+    var rName = /[\u4e00-\u9fa5]{2,15}$/m;
+    var rPhone = /^1[3456789]\d{9}$/;
+    var eEmail = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+    var rAddress = /^.{1,60}$/;
+
+    var inputArr = document.getElementsByTagName("input");
+
+    function save() {
+        // 清空所有提示
+        for (const i of inputArr) {
+            i.classList.remove("false");
+            i.nextElementSibling.innerText = "";
+        }
+        goodsId.classList.remove("false");
+
+        var flag = true;
+        if (goodsId.value == "0") {
+            goodsId.classList.add("false");
+            goodsId.parentElement.nextElementSibling.innerText = "请选择商品";
+            flag = false;
+        }
+        if (!rName.test(contactName.value)) {
+            contactName.classList.add("false");
+            contactName.nextElementSibling.innerText = "请输入2-15个字符的中文";
+            flag = false;
+        }
+        if (!rPhone.test(contactPhone.value)) {
+            contactPhone.classList.add("false");
+            contactPhone.nextElementSibling.innerText = "请输入正确的11位手机号";
+            flag = false;
+        }
+        if (!rAddress.test(contactAddress.value)) {
+            contactAddress.classList.add("false");
+            contactAddress.nextElementSibling.innerText = "请输入长度在60以内的地址";
+            flag = false;
+        }
+        if (flag) {
+            orderAdd.submit()
+        }
+    }
+
+    function cancel() {
+        location.href = "/";
+    }
+
+    $(document).ready(function (){
+        $.get("./goods/list", function (res){
+            for (const i of res) {
+                var option = new Option(i.name, i.id);
+                option.setAttribute("img", i.img);
+                goodsId.appendChild(option);
+            }
+        });
+    });
+
+    var goodsImg = document.getElementById("goodsImg");
+    goodsId.onchange = function (e) {
+        var value = e.target.value;
+        var option = document.querySelector(`option[value='${value}']`);
+        console.log(option)
+        goodsImg.src = option.getAttribute("img");
+    }
+</script>
+</html>

@@ -1,0 +1,98 @@
+input:not([type^="checkbox"]), select, textarea {
+    height: 34px;
+    border: 1px solid #dcdfe6;
+    border-radius: 5px;
+    padding: 1px 2px;
+    padding-left: 10px;
+    width: 150px;
+    box-sizing: border-box;
+    outline: none;
+}
+textarea {
+    height: 60px;
+}
+input:focus, textarea:focus {
+    border: 1px #409EFF solid;
+}
+input.false, textarea.false {
+    border: 1px rgb(255, 62, 62) solid;
+}
+
+
+button {
+    padding: 9px 15px;
+    background-color: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 7px;
+    cursor: pointer;
+    line-height: 1;
+}
+button:hover {
+    background-color: #ECF5FF;
+    /* color: #409EFF; */
+}
+
+.btn-p {
+    background-color: #409EFF;
+    border-color: #66B1FF;
+    color: white;
+}
+.btn-p:hover {
+    background-color: #66B1FF;
+}
+
+.btn-i {
+    background-color: #909399;
+    border-color: #A6A9AD;
+    color: white;
+}
+.btn-i:hover {
+    background-color: #A6A9AD;
+}
+
+.btn-o {
+    background-color: #E6A23C;
+    border-color: #EBB563;
+    color: white;
+}
+.btn-o:hover {
+    background-color: #EBB563;
+}
+
+.btn-r {
+    background-color: #F56C6C;
+    border-color: #F78989;
+    color: white;
+}
+.btn-r:hover {
+    background-color: #F78989;
+}
+
+button.mini {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+select {
+    
+}
+
+
+table {
+    border-collapse: collapse;
+}
+table thead {
+    color: #909399;
+}
+
+thead th {
+    padding: 30px 0px 20px 0px;
+}
+
+tbody {
+    font-size: 14px;
+}
+tbody td {
+    border-top: 1px #EBEEF5 solid;
+    padding: 10px 0;
+}

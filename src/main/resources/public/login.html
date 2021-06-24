@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ch-zn">
+<head>
+	<meta charset="utf-8">
+	<title>登陆界面</title>
+	<style>
+		* {margin: 0;padding: 0;}
+			
+		body,html {height: 100%;background: #EEE}
+		
+		.login {background: white}
+		.login {width: 670px;min-height: 450px;border: white 0px solid;margin: 0px auto;border-radius: 0 0 20px 20px;position: relative;top: 75px;}
+		.img {background: url(img/login-bg.jpg) no-repeat;width: 670px;height: 179px;}
+			.img span {background: #222;opacity: 0.7;width: 670px;height: 179px;display: block;}
+			.img span {
+				-moz-user-select: none;
+				-webkit-user-select: none;
+				-ms-user-select: none;
+				-khtml-user-select: none;
+				user-select: none;
+			}
+				.img h6 {font-size: 28px;padding: 5px;color: white;line-height: 139px;text-align: center;}
+		form {border: red 0px solid;text-align: center;font-size: 16px;}
+			p {margin: 25px auto;}
+			input {border-width: 0;border-bottom: #2E2E2E 1px solid;height: 35px;width: 300px;padding: 0 10px;}
+			input:focus {outline: none;}
+			/* .input1 {outline: none;} */
+				.annexation {width: 350px;height: 18px; margin: 30px auto;border: red 0px solid;font-size: 14px;margin-top: -10px;}
+					.annexation label {float: left;}
+						label>input {height: 14px;width: 16px;position: relative;top: 2px;margin-right: 3px;}
+					.annexation a {float: right;}
+						.annexation a:link,.annexation a:visited {color: #646464;text-decoration: none}
+						.annexation a:hover {color: #008850;text-decoration: underline;}
+			.button_box {border: red 0px solid;width: 350px;margin: 20px auto;padding-bottom: 20px;}
+				.button_box input {width: 130px;height: 40px;margin: 0 15px;border: 0;border-radius: 20px;background: #57b846;font-size: 16px;color: white;}
+					.button_box input:hover {background: #373737;}
+		
+			
+		.clearfix zoom1;
+		.clearfix:after {content: ".";display: block;visibility: hidden;height: 0;clear: both;}
+	</style>
+</head>
+
+<body>
+	<div class="login">
+		<div class="img"><span><h6>登&nbsp;&nbsp;&nbsp;&nbsp;录</h6></span></div>
+	 	<form action="./login" method="post" name="login" onsubmit="return check()">
+			 <input type="hidden">
+			<p>账号：<input type="text" placeholder="请输入用户账号" class="input1" id="username" name="username"></p>
+			<p>密码：<input type="password" class="input1" id="password" name="password"></p>
+			<div class="annexation clearfix">
+				<label><input type="checkbox">记住我</label>
+				<!-- <a href="#">忘记密码</a> -->
+			</div>
+			<div class="button_box">
+				<!-- <div><input type="button" value="登录"></div> -->
+				<input type="submit" value="登录" style="cursor: pointer;" >
+            </div>
+	  </form>
+	
+	
+	<script>
+        var usernameD = document.getElementById("username");
+        var passwordD = document.getElementById("password");
+
+        function check() {
+            var uRegx = /\w{5,20}/
+            var pRegx = /\w{5,15}/
+
+            // 不匹配
+            if (!uRegx.test(usernameD.value)) {
+                alert("请输入正确的用户名")
+                return false
+            }
+            if (!pRegx.test(passwordD.value)) {
+                alert("请输入正确的用户密码")
+                return false
+            }
+
+            return true
+        }
+    </script>
+</div>
+</body>
+</html>
+
